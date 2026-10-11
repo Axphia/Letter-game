@@ -162,7 +162,7 @@ client.on('interactionCreate', async (interaction) => {
     });
 
     const rulesMsg = isSolo ? `You can answer as many times as you want (Solo Mode)!` : `You cannot answer twice in a row!`;
-    await interaction.reply(`The **Word Chain Game** has started! ⛓️\n**Rules:** You must type an English word that starts with the LAST letter of the previous word. ${rulesMsg}\n\nThe starting letter is: **${currentLetter.toUpperCase()}**`);
+    await interaction.reply(`The **Word Chain Game** has started! ⛓️\n**Rules:**\n• You must type a **single English word** only (no spaces or phrases).\n• The word must start with the LAST letter of the previous word.\n• ${rulesMsg}\n\nThe starting letter is: **${currentLetter.toUpperCase()}**`);
   }
 
   if (interaction.commandName === 'stop') {
@@ -271,7 +271,15 @@ client.on('messageCreate', async (message) => {
   if (game && game.active) {
     const word = message.content.trim().toLowerCase();
 
-    // Ignore messages with spaces or non-alphabet characters (assuming they are just chatting)
+    // Check if the user typed multiple words (contains words separated by spaces like "nitrous oxide")
+    if (/^[a-z]+(\s+[a-z]+)+$/.test(word)) {
+      message.delete().catch(() => null);
+      message.channel.send(`<@${message.author.id}>, only **single words** are allowed! Do not type phrases with spaces.`)
+        .then(reply => setTimeout(() => reply.delete().catch(() => null), 3000));
+      return;
+    }
+
+    // Ignore messages with non-alphabet characters or punctuation (assuming they are chatting)
     if (!/^[a-z]+$/.test(word)) return;
 
     // Evaluate all conditions synchronously
