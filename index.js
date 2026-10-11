@@ -102,6 +102,7 @@ client.on('interactionCreate', async (interaction) => {
       active: true,
       currentLetter: currentLetter,
       usedWords: new Set(),
+      scores: new Map(),
       lastPlayerId: null,
       solo: isSolo
     });
@@ -113,9 +114,32 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName === 'stop') {
     const game = activeGames.get(interaction.channelId);
     if (game) {
-      const score = game.usedWords.size;
+      const totalWords = game.usedWords.size;
+      const sortedScores = Array.from(game.scores.entries()).sort((a, b) => b[1] - a[1]);
+
+      let summary = `🛑 **The game has ended!**\nTotal words played: **${totalWords}**\n\n`;
+
+      if (sortedScores.length > 0) {
+        summary += `🏆 **Scoreboard / Leaderboard:**\n`;
+        const topScore = sortedScores[0][1];
+        const winners = sortedScores.filter(s => s[1] === topScore);
+
+        sortedScores.forEach(([userId, score], index) => {
+          const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '•';
+          summary += `${medal} <@${userId}>: **${score}** point${score > 1 ? 's' : ''}\n`;
+        });
+
+        if (winners.length === 1) {
+          summary += `\n🎉 **Winner:** <@${winners[0][0]}> with **${topScore}** point${topScore > 1 ? 's' : ''}!`;
+        } else {
+          summary += `\n🤝 **It's a tie between:** ${winners.map(w => `<@${w[0]}>`).join(', ')} with **${topScore}** point${topScore > 1 ? 's' : ''}!`;
+        }
+      } else {
+        summary += `No points were scored this round.`;
+      }
+
       activeGames.delete(interaction.channelId);
-      await interaction.reply(`The game has been stopped in this channel. Total words played: **${score}**!`);
+      await interaction.reply(summary);
     } else {
       await interaction.reply({ content: 'No game is currently active in this channel.', ephemeral: true });
     }
@@ -184,6 +208,7 @@ client.on('messageCreate', async (message) => {
     game.usedWords.add(word);
     game.currentLetter = word.charAt(word.length - 1);
     game.lastPlayerId = message.author.id;
+    game.scores.set(message.author.id, (game.scores.get(message.author.id) || 0) + 1);
 
     // Send the reply asynchronously
     message.reply(`Good job! The next word must start with **${game.currentLetter.toUpperCase()}**!`).catch(console.error);

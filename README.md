@@ -9,12 +9,13 @@ A fully-featured, robust Discord bot for playing the classic English "Word Chain
 * **Race-Condition Proof:** Engineered with synchronous state updates to prevent breaking the chain if multiple users answer in the exact same millisecond.
 * **Anti-Spam Rules:** A single player cannot answer twice in a row (unless playing in Solo Mode).
 * **Solo Mode:** Start a game with `/start solo:True` to practice by yourself without consecutive player restrictions!
+* **Scoreboard & Leaderboard:** Automatically tracks each player's correct words and announces the full leaderboard and winner when `/stop` is called.
 
 ## 📜 Commands
 
 * `/setup` **(Admin Only):** Automatically creates a dedicated `#word-game` channel with the correct bot permissions (View, Send, and Manage Messages) and @everyone permissions.
 * `/start [solo: boolean]` **(Everyone):** Starts a new game and provides a random starting letter. Optionally enable solo mode.
-* `/stop` **(Everyone):** Stops the current active game in the channel and announces the total score (words played).
+* `/stop` **(Everyone):** Stops the current active game in the channel, displays the total words played, and posts a leaderboard showing each player's score and declares the winner(s).
 * `/clear` **(Admin Only):** Clears up to 100 recent messages. Restricted to work only in an active game channel or a channel named `#word-game`.
 
 ## 🛠️ Installation & Setup
