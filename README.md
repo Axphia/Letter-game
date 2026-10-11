@@ -10,13 +10,26 @@ A fully-featured, robust Discord bot for playing the classic English "Word Chain
 * **Anti-Spam Rules:** A single player cannot answer twice in a row (unless playing in Solo Mode).
 * **Solo Mode:** Start a game with `/start solo:True` to practice by yourself without consecutive player restrictions!
 * **Scoreboard & Leaderboard:** Automatically tracks each player's correct words and announces the full leaderboard and winner when `/stop` is called.
+* **Persistent Player Tiers:** Lifetime points are tracked for every player, unlocking rank tiers from Bronze all the way to Grandmaster!
 
 ## 📜 Commands
 
 * `/setup` **(Admin Only):** Automatically creates a dedicated `#word-game` channel with the correct bot permissions (View, Send, and Manage Messages) and @everyone permissions.
 * `/start [solo: boolean]` **(Everyone):** Starts a new game and provides a random starting letter. Optionally enable solo mode.
 * `/stop` **(Everyone):** Stops the current active game in the channel, displays the total words played, and posts a leaderboard showing each player's score and declares the winner(s).
+* `/tier [user]` **(Everyone):** Checks your (or another player's) rank tier, points, total words answered, and progress bar to the next tier.
 * `/clear` **(Admin Only):** Clears up to 100 recent messages. Restricted to work only in an active game channel or a channel named `#word-game`.
+
+## 🏆 Player Tiers
+| Tier | Emoji | Points Required |
+| :--- | :---: | :--- |
+| **Bronze** | 🥉 | 0 - 49 pts |
+| **Silver** | 🥈 | 50 - 149 pts |
+| **Gold** | 🥇 | 150 - 299 pts |
+| **Platinum** | 💎 | 300 - 499 pts |
+| **Diamond** | 🔮 | 500 - 999 pts |
+| **Master** | 👑 | 1,000 - 2,499 pts |
+| **Grandmaster** | ⚡ | 2,500+ pts |
 
 ## 🛠️ Installation & Setup
 
